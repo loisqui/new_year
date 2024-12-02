@@ -1,0 +1,114 @@
+/* 页面整体样式 */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(120deg, #ff9a9e, #fad0c4);
+    overflow: hidden;
+}
+
+/* 标题样式 */
+h1, h2, h3 {
+    color: #fff;
+    font-size: 2em;
+    font-family: 'Arvo', sans-serif;
+    font-weight: bold;
+    text-shadow:
+        -3px -3px 0 #222,
+        3px -3px 0 #222,
+        -3px 3px 0 #222,
+        3px 3px 0 #222,
+        4px 4px 0 #fff,
+        5px 5px 0 #fff,
+        6px 6px 0 #fff,
+        7px 7px 0 #fff;
+    line-height: 1.2em;
+    letter-spacing: 0.1em;
+    margin: 0;
+}
+
+/* 页面标题 */
+#title {
+    text-align: center;
+    padding: 20px;
+}
+
+/* 输入框和按钮 */
+#newWish {
+    text-align: center;
+    margin: 20px;
+}
+
+#wishInput {
+    padding: 10px;
+    width: 70%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background: #ff6f61;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 倒计时样式 */
+#countdown {
+    text-align: center;
+    font-size: 1.5em;
+    margin: 20px;
+    background-image: linear-gradient(to right, blue, #66ffff 10%, #cc00ff 20%, #CC00CC 30%, #CCCCFF 40%, #00FFFF 50%, #CCCCFF 60%, #CC00CC 70%, #CC00FF 80%, #66FFFF 90%, blue 100%);
+    background-size: 200% 100%;
+    background-clip: text;
+    color: transparent;
+    animation: masked-animation 4s linear infinite;
+    position: relative;
+    z-index: 2;
+}
+
+/* 烟花效果的 canvas */
+#canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* 滚动字幕样式 */
+.marquee {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 3;
+}
+
+.marquee-content div {
+    position: absolute;
+    white-space: nowrap;
+    color: #fff;
+    font-size: 1.2em;
+    animation: marquee 10s linear infinite;  /* 修改为无限循环 */
+}
+
+/* 滚动字幕动画 */
+@keyframes marquee {
+    0% {
+        transform: translateX(-100%); /* 从屏幕左侧外开始 */
+    }
+    100% {
+        transform: translateX(100%); /* 滚动到屏幕右侧外 */
+    }
+}
+
+/* 动画效果的背景 */
+@keyframes masked-animation {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 100% 0%;
+    }
+}

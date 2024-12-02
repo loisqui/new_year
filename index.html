@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Handlebars Project</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div id="title">
+        <h1>Happy New</h1>
+        <h3>Year!!</h3>
+        <h2>2025，你好</h2>
+    </div>
+    <div id="newWish">
+        <input type="text" id="wishInput" placeholder="输入你的新年愿望">
+        <button type="button" onclick="submitWish()">提交愿望</button>
+    </div>
+    <div id="countdown">剩余时间: 0天 00时00分00秒</div>
+    <div id="firework">
+        <canvas id="canvas">Canvas is not supported in your browser.</canvas>
+    </div>
+    <div id="wishList" class="marquee">
+        <div class="marquee-content">
+            <!-- 显示愿望 -->
+        </div>
+    </div>
+
+    <script src="/countdown.js"></script>
+    <script src="/firework.js"></script>
+    <script>
+        // 页面加载时，获取已有愿望
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/get-wishes')
+                .then(response => response.json())
+                .then(data => {
+                    data.wishes.forEach(wish => addWishToMarquee(wish.content));
+                })
+                .catch(error => console.error('Error fetching wishes:', error));
+        });
+
+        // 提交愿望
+        function submitWish() {
+            const wishInput = document.getElementById('wishInput');
+            const submitButton = document.querySelector('#newWish button');
+            const wish = wishInput.value.trim();
+
+            if (!wish) {
+                alert('愿望不能为空！');
+                return;
+            }
+
+            submitButton.disabled = true; // 禁用按钮
+            fetch('/submit-wish', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ wish }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('愿望提交成功！');
+                        wishInput.value = ''; // 清空输入框
+                        addWishToMarquee(wish); // 在页面上显示愿望
+                    } else {
+                        console.error('提交失败');
+                    }
+                })
+                .catch(error => console.error('Error:', error))
+                .finally(() => {
+                    submitButton.disabled = false; // 恢复按钮
+                });
+        }
+
+        // 动态添加愿望到滚动字幕
+        function addWishToMarquee(wish) {
+            console.log('添加愿望到滚动字幕:', wish);
+
+            const marqueeContent = document.querySelector('.marquee-content');
+            const newWishDiv = document.createElement('div');
+            newWishDiv.textContent = wish; // 设置愿望的文本内容
+            newWishDiv.style.position = 'absolute'; // 确保愿望有绝对定位
+            newWishDiv.style.whiteSpace = 'nowrap'; // 确保愿望文本不会换行
+
+            const randomY = Math.random() * (window.innerHeight - 100); // 随机生成 Y 坐标，防止重叠
+            newWishDiv.style.top = `${randomY}px`;
+            newWishDiv.style.left = `-${newWishDiv.offsetWidth}px`; // 初始位置在屏幕左侧外
+
+            const randomDuration = Math.random() * 5 + 8; // 随机动画持续时间
+            newWishDiv.style.animation = `marquee ${randomDuration}s linear infinite`;
+
+            marqueeContent.appendChild(newWishDiv); // 将新愿望添加到滚动区域
+        }
+    </script>
+</body>
+</html>
